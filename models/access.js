@@ -6,33 +6,23 @@ const connection = mongoose.createConnection("mongodb+srv://app:app@hr-zgxte.mon
 
 autoIncrement.initialize(connection)
 
-const userSchema = new Schema({
+const accessSchema = new Schema({
     employee_id: {
         type: Number,
         required: true,
     },
-    firstname: {
+    password: {
         type: String,
-        required: true
-    },
-    lastname: {
-        type: String,
-        required: true
-    },
-    role_id: {
-        type: String,
-        required: true
-    },
-    pesel: {
-        type: Number,
         required: true
     }
-}, { timestamps: true })
+})
 
-userSchema.plugin(autoIncrement.plugin, {
-    model: 'User',
+
+accessSchema.plugin(autoIncrement.plugin, {
+    model: 'UserAccess',
     field: 'employee_id',
+    startAt: 1,
     incrementBy: 1
 })
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('Access', accessSchema, "access")
