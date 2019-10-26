@@ -19,7 +19,7 @@ const accessSchema = new Schema({
 
 
 accessSchema.plugin(autoIncrement.plugin, {
-    model: 'UserAccess',
+    model: 'Access',
     field: 'employee_id',
     startAt: 1,
     incrementBy: 1

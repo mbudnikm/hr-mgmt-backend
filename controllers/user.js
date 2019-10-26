@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator/check')
+const bcrypt = require('bcryptjs')
 
 const Employee = require('../models/employee')
 const Access = require('../models/access')
@@ -33,6 +34,26 @@ exports.createUser = (req, res, next) => {
     const archive_id = null
 
     const password = req.body.password;
+    bcrypt.hash(password, 12)
+        .then(hashedPassword => {
+            const access = new Access({
+                password: hashedPassword
+            })
+            return access.save()
+        })
+        .then(result => {
+            console.log(result)
+            res.status(201).json({
+                message: "Użytkownik został poprawnie stworzony",
+                user: result
+            })
+        })
+        .catch(err => {
+            if(!err.statusCode) {
+                err.statusCode = 500
+            }
+            next(err)
+        })
 
     const user = new Employee({
         firstname: firstname, 
@@ -42,10 +63,9 @@ exports.createUser = (req, res, next) => {
         archive_id: archive_id
     })
 
-    const access = new Access({
-        password: password
-    })
+    // RESET EMPLOYEE_ID
 
+    
     /*userAccess
         .save( function(err) {
             userAccess.nextCount(function(err, count) {
@@ -64,8 +84,9 @@ exports.createUser = (req, res, next) => {
             })
         })*/
     
+    
 
-    access
+    /*access
         .save()
         .then(result => {
             console.log(result)
@@ -76,7 +97,7 @@ exports.createUser = (req, res, next) => {
         })
         .catch(err => {
             console.log(err)
-        })
+        })*/
 
     user
         .save()

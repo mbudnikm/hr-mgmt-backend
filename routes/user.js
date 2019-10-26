@@ -5,21 +5,26 @@ const userController = require('../controllers/user')
 
 const Employee = require('../models/employee')
 
+const isAuth = require('../middleware/is-auth')
+
 const router = express.Router()
 
 // GET /users
-router.get('/', userController.getUsers)
+router.get('/', isAuth, userController.getUsers)
 
 // POST /users
 router.post(
     '/', 
+    isAuth,
     [
         body('firstname')
             .trim()
-            .isLength({ min: 3 }),
+            .isLength({ min: 3 })
+            .withMessage('Imię powinno mieć minimum 3 znaki'),
         body('lastname')
             .trim()
-            .isLength({ min: 3 }),
+            .isLength({ min: 3 })
+            .withMessage('Nazwisko powinno mieć minimum 3 znaki'),
         body('pesel')
             .custom((value, { req }) => {
                 return Employee.findOne({pesel: value}).then(employeeDoc => {
@@ -32,9 +37,13 @@ router.post(
         body('password')
             .trim()
             .isLength({min: 8})
+            .withMessage('Hasło powinno mieć minimum 8 znaków'),
     ], 
     userController.createUser
 )
-router.get('/:userId', userController.getUser)
+
+// GET /users/:userId
+
+router.get('/:userId', isAuth, userController.getUser)
 
 module.exports = router
