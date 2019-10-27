@@ -6,6 +6,11 @@ const connection = mongoose.createConnection("mongodb+srv://app:app@hr-zgxte.mon
 
 autoIncrement.initialize(connection)
 
+const addressSchema = require('./address')
+const contactSchema = require('./contact')
+const profileSchema = require('./profile')
+const employmentSchema = require('./employment')
+
 const employeeSchema = new Schema({
     employee_id: {
         type: Number,
@@ -30,62 +35,23 @@ const employeeSchema = new Schema({
     archive_id: {
         type: Number
     },
-    /*contact: {
-        email: {
-            type: String
-        },
-        business_tel: {
-            type: String
-        },
-        private_tel: {
-            type: String
-        }
+    contact: {
+        type: contactSchema,
+        default: {},
     },
     profile: {
-        manager_id: {
-            type: Number
-        },
-        job_position: {
-            type: String
-        },
-        img: {
-            type: String
-        }
+        type: profileSchema,
+        required: true,
+        default: {},
     },
     address: {
-        postcode: {
-            type: Number
-        },
-        city: {
-            type: String
-        },
-        street: {
-            type: String
-        }
+        type: addressSchema,
+        default: {},
     },
-    employment: {
-        contract_type: {
-            type: String
-        },
-        basis_brutto: {
-            type: String
-        },
-        employment_start_date: {
-            type: Date
-        },
-        contract_end_date: {
-            type: Date
-        },
-        hired_by: {
-            type: String
-        },
-        bonuses: {
-            type: String
-        },
-        employment_comments: {
-            type: String
-        }
-    }*/
+    employment: { 
+        type: employmentSchema, 
+        default: {},
+    }
 })
 
 employeeSchema.plugin(autoIncrement.plugin, {

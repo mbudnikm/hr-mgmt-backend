@@ -7,7 +7,7 @@ const Access = require('../models/access')
 exports.getUsers = (req, res, next) => {
     Employee
         .find()
-        .then(users => {
+        .then(employees => {
             res.status(200).json({employees: employees})
         })
         .catch(err => {
@@ -32,6 +32,18 @@ exports.createUser = (req, res, next) => {
     const role_id = req.body.role_id;
     const pesel = req.body.pesel;
     const archive_id = null
+    const manager_id = req.body.manager_id;
+
+    const employee = new Employee({
+        firstname: firstname, 
+        lastname: lastname,
+        role_id: role_id,
+        pesel: pesel,
+        archive_id: archive_id,
+        profile: {
+            manager_id: manager_id
+        }
+    })
 
     const password = req.body.password;
     bcrypt.hash(password, 12)
@@ -39,13 +51,13 @@ exports.createUser = (req, res, next) => {
             const access = new Access({
                 password: hashedPassword
             })
-            return access.save()
+            return access.save() && employee.save()
         })
         .then(result => {
             console.log(result)
             res.status(201).json({
                 message: "Użytkownik został poprawnie stworzony",
-                user: result
+                employee: result
             })
         })
         .catch(err => {
@@ -54,14 +66,6 @@ exports.createUser = (req, res, next) => {
             }
             next(err)
         })
-
-    const user = new Employee({
-        firstname: firstname, 
-        lastname: lastname,
-        role_id: role_id,
-        pesel: pesel,
-        archive_id: archive_id
-    })
 
     // RESET EMPLOYEE_ID
 
@@ -99,7 +103,7 @@ exports.createUser = (req, res, next) => {
             console.log(err)
         })*/
 
-    user
+    /*user
         .save()
         .then(result => {
             console.log(result)
@@ -112,7 +116,7 @@ exports.createUser = (req, res, next) => {
             if(!err.statusCode) {
                 err.statusCode = 500
             }
-        })
+        })*/
 }
 
 exports.getUser = (req, res, next) => {
