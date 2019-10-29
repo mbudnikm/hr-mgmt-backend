@@ -123,3 +123,24 @@ exports.getUser = (req, res, next) => {
         next(err)
     })
 }
+
+exports.deleteUser = (req, res, next) => {
+    // TO DO: delete from all documents
+    const userId = req.params.userId
+
+    Access.findOneAndDelete({employee_id: userId})
+        .then(user => {
+            if(!user) {
+                const error = new Error('Nie znaleziono użytkownika')
+                error.statusCode = 404
+                throw error
+            }
+            res.status(200).json({message: "Usunięto poprawnie użytkownika"})
+    })
+    .catch(err => {
+        if(!err.statusCode) {
+            err.statusCode = 500
+        }
+        next(err)
+    })
+}
