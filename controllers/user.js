@@ -102,34 +102,19 @@ exports.createUser = (req, res, next) => {
         .catch(err => {
             console.log(err)
         })*/
-
-    /*user
-        .save()
-        .then(result => {
-            console.log(result)
-            res.status(201).json({
-                message: "Użytkownik został poprawnie stworzony",
-                user: result
-            })
-        })
-        .catch(err => {
-            if(!err.statusCode) {
-                err.statusCode = 500
-            }
-        })*/
 }
 
 exports.getUser = (req, res, next) => {
     const userId = req.params.userId
+
     User.findOne({employee_id: userId})
-    .then(user => {
-        console.log("success")
-        if(!user) {
-            const error = new Error('Nie znaleziono użytkownika')
-            error.statusCode = 404
-            throw error
-        }
-        res.status(200).json({user: user})
+        .then(user => {
+            if(!user) {
+                const error = new Error('Nie znaleziono użytkownika')
+                error.statusCode = 404
+                throw error
+            }
+            res.status(200).json({user: user})
     })
     .catch(err => {
         if(!err.statusCode) {
