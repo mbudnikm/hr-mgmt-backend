@@ -3,6 +3,9 @@ const bcrypt = require('bcryptjs')
 
 const Employee = require('../models/employee')
 const Access = require('../models/access')
+const Archive = require('../models/archive')
+const Assessment = require('../models/assessment')
+const Training = require('../models/training')
 
 exports.getUsers = (req, res, next) => {
     Employee
@@ -125,10 +128,14 @@ exports.getUser = (req, res, next) => {
 }
 
 exports.deleteUser = (req, res, next) => {
-    // TO DO: delete from all documents
+    // TO DO: delete from all documents after all endpoints
     const userId = req.params.userId
 
     Access.findOneAndDelete({employee_id: userId})
+    && Employee.findOneAndDelete({employee_id: userId})
+    /*&& Archive.findOneAndDelete({employee_id: userId})
+    && Assessment.deleteMany({employee_id: userId})
+    && Training.deleteMany({employee_id: userId})*/
         .then(user => {
             if(!user) {
                 const error = new Error('Nie znaleziono użytkownika')
