@@ -55,10 +55,12 @@ exports.changePassword = (req, res, next) => {
     const employeeId = req.params.employeeId
     const password = req.body.password
 
-    Access.findOneAndUpdate(
-        {employee_id: employeeId}, 
-        {password: password}, 
-        {new: true})
+    bcrypt.hash(password, 12)
+        .then(hashedPassword => 
+            Access.findOneAndUpdate(
+                {employee_id: employeeId}, 
+                {password: hashedPassword},
+                {new: true}))
         .then(user => {
             if(!user) {
                 const error = new Error('Nie znaleziono użytkownika')

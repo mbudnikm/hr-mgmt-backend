@@ -36,21 +36,16 @@ const employeeSchema = new Schema({
         type: Number
     },
     contact: {
-        type: contactSchema,
-        default: {},
+        type: [contactSchema],
     },
     profile: {
-        type: profileSchema,
-        required: true,
-        default: {},
+        type: [profileSchema],
     },
     address: {
-        type: addressSchema,
-        default: {},
+        type: [addressSchema],
     },
     employment: { 
-        type: employmentSchema, 
-        default: {},
+        type: [employmentSchema], 
     }
 })
 
