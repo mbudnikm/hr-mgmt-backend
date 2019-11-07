@@ -110,7 +110,7 @@ exports.createUser = (req, res, next) => {
 exports.getUser = (req, res, next) => {
     const userId = req.params.userId
 
-    User.findOne({employee_id: userId})
+    Employee.findOne({employee_id: userId})
         .then(user => {
             if(!user) {
                 const error = new Error('Nie znaleziono użytkownika')

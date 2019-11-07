@@ -37,15 +37,20 @@ const employeeSchema = new Schema({
     },
     contact: {
         type: [contactSchema],
+        required: true,
+        default: [{}]
     },
     profile: {
         type: [profileSchema],
+        default: [{}]
     },
     address: {
         type: [addressSchema],
+        default: [{}]
     },
     employment: { 
         type: [employmentSchema], 
+        default: [{}]
     }
 })
 
