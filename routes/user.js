@@ -48,6 +48,6 @@ router.delete('/:userId', isAuth, userController.deleteUser)
 
 // GET /users/:userId
 
-router.get('/:userId', isAuth, userController.getUser)
+// router.get('/:userId', isAuth, userController.getUser)
 
 module.exports = router

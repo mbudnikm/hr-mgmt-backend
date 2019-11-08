@@ -11,7 +11,13 @@ exports.getUsers = (req, res, next) => {
     Employee
         .find()
         .then(employees => {
-            res.status(200).json({employees: employees})
+            res.status(200).json({employees: employees.map(employee => ({
+                _id: employee._id,
+                firstname: employee.firstname,
+                lastname: employee.lastname,
+                role_id: employee.role_id,
+                employee_id: employee.employee_id
+            }))})
         })
         .catch(err => {
             if(!err.statusCode) {
