@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 
 const userRoutes = require('./routes/user')
 const accessRoutes = require('./routes/access')
+const employeeRoutes = require('./routes/employee')
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.use((req, res, next) => {
 
 app.use('/users', userRoutes)
 app.use('/access', accessRoutes)
+app.use('/employees', employeeRoutes)
 
 app.use((error, req, res, next) => {
     console.log(error)
