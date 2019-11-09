@@ -78,5 +78,18 @@ exports.postProject = (req, res, next) => {
 }
 
 exports.deleteProject = (req, res, next) => {
-
+    const projectId = req.params.productId;
+    Project.findByIdAndRemove(projectId)
+        .then(result => {
+            console.log(result)
+            res.status(200).json({
+                message: "Projekt został usunięty",
+            })
+        })
+        .catch(err => {
+            if(!err.statusCode) {
+                err.statusCode = 500
+            }
+            next(err)
+        })
 }
