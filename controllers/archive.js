@@ -46,3 +46,24 @@ exports.postArchive = (req, res, next) => {
             next(err)
         })
 }
+
+exports.deleteArchive = (req, res, next) => {
+    const employeeId = req.params.employeeId;
+    Employee.findOneAndUpdate(
+        {employee_id: employeeId}, 
+        {archive_id: null},
+        {new: true})
+    && Archive.findOneAndRemove(employeeId)
+        .then(result => {
+            console.log(result)
+            res.status(200).json({
+                message: "Pracownik został usunięty z archiwum danych",
+            })
+        })
+        .catch(err => {
+            if(!err.statusCode) {
+                err.statusCode = 500
+            }
+            next(err)
+        })
+}
