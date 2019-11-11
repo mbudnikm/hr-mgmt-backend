@@ -7,7 +7,10 @@ const isAuth = require('../middleware/is-auth')
 const router = express.Router()
 
 // GET /documents
-router.get('/', isAuth, documentController.getDocuments)
+router.get('/', isAuth, documentController.getDocumentsList)
+
+// GET /documents/:documentId
+router.get('/:documentId', isAuth, documentController.getDocument)
 
 // POST /documents
 router.post('/', isAuth, documentController.postDocument)
