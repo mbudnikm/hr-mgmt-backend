@@ -3,13 +3,13 @@ const Employee = require('../models/employee')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-exports.login = (req, res, next) => {
+exports.login = async (req, res, next) => {
     const employee_id = req.body.employee_id
     const password = req.body.password
     let loadedUser;
     let loadedUserRole;
-
-    Access.findOne({employee_id: employee_id})
+    try {
+        Access.findOne({employee_id: employee_id})
         .then(user => {
             if(!user) {
                 const error = new Error('Użytkownik o podanym id pracownika nie istnieje')
@@ -43,12 +43,14 @@ exports.login = (req, res, next) => {
                 role_id: loadedUserRole
             })
         })
-        .catch(err => {
-            if(!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err)
-        })
+        return
+    } catch (err) {
+        if(!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err)
+        return err
+    }
 }
 
 exports.changePassword = (req, res, next) => {
