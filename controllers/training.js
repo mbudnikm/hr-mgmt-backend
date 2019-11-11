@@ -78,3 +78,20 @@ exports.postTraining = (req, res, next) => {
             next(err)
         })
 }
+
+exports.deleteTraining = (req, res, next) => {
+    const trainingId = req.params.trainingId;
+    Training.findByIdAndRemove(trainingId)
+        .then(result => {
+            console.log(result)
+            res.status(200).json({
+                message: "Szkolenie zostało usunięte",
+            })
+        })
+        .catch(err => {
+            if(!err.statusCode) {
+                err.statusCode = 500
+            }
+            next(err)
+        })
+}
