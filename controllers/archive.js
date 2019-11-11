@@ -53,7 +53,7 @@ exports.deleteArchive = (req, res, next) => {
         {employee_id: employeeId}, 
         {archive_id: null},
         {new: true})
-    && Archive.findOneAndRemove(employeeId)
+    && Archive.findOneAndRemove({employee_id: employeeId})
         .then(result => {
             console.log(result)
             res.status(200).json({
