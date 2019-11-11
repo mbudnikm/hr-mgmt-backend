@@ -87,12 +87,15 @@ exports.postDocument = (req, res, next) => {
 exports.deleteDocument = (req, res, next) => {
     const documentId = req.params.documentId;
 
-    Document.findByIdAndRemove(documentId)
+    Document.findById(documentId)
         .then(result => {
             if(!result) {
                 return next(new Error("Nie znaleziono dokumentu"))
             }
             fileHelper.deleteFile(result.path)
+            return Document.deleteOne({_id: documentId})
+        })
+        .then(() => {
             res.status(200).json({
                 message: "Dokument został usunięty",
             })
