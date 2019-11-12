@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const employmentSchema = new Schema({
+    job_position: {
+        type: String,
+        default: null
+    },
     contract_type: {
         type: String,
         default: null

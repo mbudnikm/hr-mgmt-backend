@@ -8,7 +8,6 @@ autoIncrement.initialize(connection)
 
 const addressSchema = require('./address')
 const contactSchema = require('./contact')
-const profileSchema = require('./profile')
 const employmentSchema = require('./employment')
 
 const employeeSchema = new Schema({
@@ -28,6 +27,10 @@ const employeeSchema = new Schema({
         type: String,
         required: true
     },
+    manager_id: {
+        type: Number,
+        required: true
+    },
     pesel: {
         type: Number,
         required: true
@@ -38,10 +41,6 @@ const employeeSchema = new Schema({
     contact: {
         type: [contactSchema],
         required: true,
-        default: [{}]
-    },
-    profile: {
-        type: [profileSchema],
         default: [{}]
     },
     address: {

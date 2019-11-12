@@ -49,9 +49,7 @@ exports.createUser = (req, res, next) => {
         role_id: role_id,
         pesel: pesel,
         archive_id: archive_id,
-        profile: {
-            manager_id: manager_id
-        }
+        manager_id: manager_id
     })
 
     const password = req.body.password;
