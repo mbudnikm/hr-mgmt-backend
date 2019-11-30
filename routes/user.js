@@ -44,7 +44,10 @@ router.post(
 
 // DELETE /users/:employeeId
 
-router.delete('/:userId', isAuth, userController.deleteUser)
+router.delete('/:employeeId', isAuth, userController.deleteUser)
+
+// PUT /users/:employeeId
+router.put('/:employeeId', isAuth, userController.putUser)
 
 // GET /users/:userId
 

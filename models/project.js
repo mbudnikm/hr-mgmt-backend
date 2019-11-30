@@ -16,7 +16,7 @@ const projectSchema = new Schema({
         type: Date,
     },
     project_comments: {
-        type: Date,
+        type: String,
     },
     employees: {
         type: Array,

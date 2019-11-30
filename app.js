@@ -71,6 +71,8 @@ app.use((error, req, res, next) => {
     res.status(status).json({message: message, data: data})
 })
 
+mongoose.set('useFindAndModify', false);
+
 mongoose
     .connect(
         'mongodb+srv://app:app@hr-zgxte.mongodb.net/mgmt?retryWrites=true&w=majority')

@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 const addressSchema = new Schema({
     postcode: {
-        type: Number,
+        type: String,
         default: null
     },
     city: {

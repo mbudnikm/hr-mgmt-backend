@@ -63,15 +63,15 @@ exports.postProject = (req, res, next) => {
     project
         .save()
         .then(result => {
-            console.log(result)
             res.status(201).json({
-                message: "Projekt został dodany",
+                message: "Projekt został dodany poprawnie",
                 project: result
             })
         })
         .catch(err => {
             if(!err.statusCode) {
                 err.statusCode = 500
+                err.message = "Coś poszło nie tak! Projekt nie został dodany"
             }
             next(err)
         })
@@ -81,7 +81,6 @@ exports.deleteProject = (req, res, next) => {
     const projectId = req.params.productId;
     Project.findByIdAndRemove(projectId)
         .then(result => {
-            console.log(result)
             res.status(200).json({
                 message: "Projekt został usunięty",
             })

@@ -10,7 +10,7 @@ const router = express.Router()
 router.get('/:employeeId', isAuth, assessmentController.getEmployeeAssessments)
 
 // POST /assessments
-router.post('/assessments', isAuth, assessmentController.postAssessment)
+router.post('/', isAuth, assessmentController.postAssessment)
 
 // DELETE /assessments/:assessmentId
 router.delete('/:assessmentId', isAuth, assessmentController.deleteAssessment)

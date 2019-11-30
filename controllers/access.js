@@ -12,8 +12,10 @@ exports.login = async (req, res, next) => {
         Access.findOne({employee_id: employee_id})
         .then(user => {
             if(!user) {
+                console.log("JESTEM TUTAJ!")
                 const error = new Error('Użytkownik o podanym id pracownika nie istnieje')
                 error.statusCode = 401;
+                next(error)
                 throw error
             }
             loadedUser = user
@@ -27,6 +29,7 @@ exports.login = async (req, res, next) => {
             if(!isEqual){
                 const error = new Error('Wprowadzone hasło jest niepoprawne')
                 error.statusCode = 401
+                next(error)
                 throw error
             }
 

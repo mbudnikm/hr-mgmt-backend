@@ -11,7 +11,7 @@ exports.getUsers = (req, res, next) => {
     Employee
         .find()
         .then(employees => {
-            res.status(200).json({employees: employees.map(employee => ({
+            res.status(200).json({users: employees.map(employee => ({
                 _id: employee._id,
                 firstname: employee.firstname,
                 lastname: employee.lastname,
@@ -63,8 +63,16 @@ exports.createUser = (req, res, next) => {
         .then(result => {
             console.log(result)
             res.status(201).json({
-                message: "Użytkownik został poprawnie stworzony",
-                employee: result
+                message: "Użytkownik został poprawnie dodany",
+                employee: {
+                    _id: result._id,
+                    employee_id: result.employee_id,
+                    firstname: result.firstname,
+                    lastname: result.lastname,
+                    role_id: result.role_id,
+                    pesel: result.pesel,
+                    manager_id: result.manager_id,
+                }
             })
         })
         .catch(err => {
@@ -132,21 +140,23 @@ exports.getUser = (req, res, next) => {
 }
 
 exports.deleteUser = (req, res, next) => {
-    // TO DO: delete from all documents after all endpoints
-    const userId = req.params.userId
+    const employeeId = req.params.employeeId
 
-    Access.findOneAndDelete({employee_id: userId})
-    && Employee.findOneAndDelete({employee_id: userId})
-    /*&& Archive.findOneAndDelete({employee_id: userId})
-    && Assessment.deleteMany({employee_id: userId})
-    && Training.deleteMany({employee_id: userId})*/
+    Access.findOne({employee_id: employeeId})
         .then(user => {
             if(!user) {
                 const error = new Error('Nie znaleziono użytkownika')
                 error.statusCode = 404
                 throw error
             }
-            res.status(200).json({message: "Usunięto poprawnie użytkownika"})
+            Access.deleteOne({employee_id: employeeId})
+            && Employee.findOneAndDelete({employee_id: employeeId})
+            && (Archive.findOne({employee_id: employeeId}) && Archive.findOneAndDelete({employee_id: employeeId}))
+            && (Assessment.findOne({employee_id: employeeId}) && Assessment.deleteMany({employee_id: employeeId}))
+            && (Training.findOne({employee_id: employeeId}) && Training.deleteMany({employee_id: employeeId}))
+                .then(user => {
+                    res.status(200).json({message: "Usunięto poprawnie użytkownika"})
+                })
     })
     .catch(err => {
         if(!err.statusCode) {
@@ -154,4 +164,44 @@ exports.deleteUser = (req, res, next) => {
         }
         next(err)
     })
+}
+
+exports.putUser = (req, res, next) => {
+    const employeeId = req.params.employeeId
+
+    const role_id = req.body.role_id
+    const manager_id = req.body.manager_id
+
+    const updatedUser = {
+        role_id: role_id,
+        manager_id: manager_id
+    }
+
+    Employee
+        .findOneAndUpdate(
+            {employee_id: employeeId},
+            updatedUser,
+            {new: true})
+        .then(user => {
+            if(!user) {
+                const error = new Error('Wystąpił błąd! Nie udało zmienić się danych użytkownika.')
+                error.statusCode = 404
+                throw error
+            }
+            res.status(200).json({
+                user: {
+                    employee_id: user.employee_id,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    role_id: user.role_id,
+                    manager_id: user.manager_id
+                }
+            })
+        })
+        .catch(err => {
+            if(!err.statusCode) {
+                    err.statusCode = 500
+                }
+                next(err)
+        })
 }

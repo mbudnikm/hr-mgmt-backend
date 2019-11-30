@@ -27,13 +27,12 @@ exports.postArchive = (req, res, next) => {
     })
 
     Employee.findOneAndUpdate(
-        {employee_id: employeeId}, 
-        {archive_id: employeeId},
+        {employee_id: employee_id}, 
+        {archive_id: employee_id},
         {new: true})
     && archiveEmployee
         .save()
         .then(result => {
-            console.log(result)
             res.status(201).json({
                 message: "Pracownik został przeniesiony do archiwum danych",
                 archive: result
@@ -53,12 +52,17 @@ exports.deleteArchive = (req, res, next) => {
         {employee_id: employeeId}, 
         {archive_id: null},
         {new: true})
-    && Archive.findOneAndRemove({employee_id: employeeId})
+    && Archive.findOne({employee_id: employeeId})
         .then(result => {
-            console.log(result)
+            if(!result) {
+                const error = new Error("Nie znaleziono pracownika")
+                next(error)
+                throw Error
+            }
             res.status(200).json({
                 message: "Pracownik został usunięty z archiwum danych",
             })
+            return Archive.deleteOne({_id: result._id})
         })
         .catch(err => {
             if(!err.statusCode) {

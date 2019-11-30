@@ -36,6 +36,14 @@ exports.putTraining = (req, res, next) => {
             {_id: trainingId},
             updatedTraining,
             {new: true})
+        .then(training => {
+            if(!training) {
+                const error = new Error('Wystąpił błąd! Nie udało się zaktualizować szkolenia!')
+                error.statusCode = 404
+                throw error
+            }
+            res.status(200).json({training})
+        })
         .catch(err => {
             if(!err.statusCode) {
                 err.statusCode = 500
@@ -81,12 +89,17 @@ exports.postTraining = (req, res, next) => {
 
 exports.deleteTraining = (req, res, next) => {
     const trainingId = req.params.trainingId;
-    Training.findByIdAndRemove(trainingId)
+    Training.findById(trainingId)
         .then(result => {
-            console.log(result)
+            if(!result) {
+                const error = new Error("Nie znaleziono szkolenia")
+                next(error)
+                throw Error
+            }
             res.status(200).json({
                 message: "Szkolenie zostało usunięte",
             })
+            return Training.deleteOne({_id: trainingId})
         })
         .catch(err => {
             if(!err.statusCode) {

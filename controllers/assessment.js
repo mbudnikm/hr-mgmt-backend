@@ -52,12 +52,17 @@ exports.postAssessment = (req, res, next) => {
 
 exports.deleteAssessment = (req, res, next) => {
     const assessmentId = req.params.assessmentId
-    Assessment.findByIdAndRemove(assessmentId)
+    Assessment.findById(assessmentId)
         .then(result => {
-            console.log(result)
+            if(!result) {
+                const error = new Error("Nie znaleziono oceny")
+                next(error)
+                throw Error
+            }
             res.status(200).json({
                 message: "Ocena została usunięta",
             })
+            return Assessment.deleteOne({_id: assessmentId})
         })
         .catch(err => {
             if(!err.statusCode) {

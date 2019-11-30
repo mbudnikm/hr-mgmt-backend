@@ -10,10 +10,10 @@ describe('Access Controller - Login', () => {
         Access.findOne.throws();
 
         const req = {
-        body: {
-            employee_id: 11,
-            password: 'test'
-        }
+            body: {
+                employee_id: 11,
+                password: 'test'
+            }
         };
 
         AccessController.login(req, {}, () => {}).then(result => {

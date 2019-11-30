@@ -12,5 +12,7 @@ router.get('/all/:managerId', isAuth, employeeController.getManagerEmployees)
 // GET /employees/:employeeId
 router.get('/:employeeId', isAuth, employeeController.getEmployee)
 
+// PUT /employees/:employeeId
+router.put('/:employeeId', isAuth, employeeController.putEmployee)
 
 module.exports = router

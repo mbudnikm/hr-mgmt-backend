@@ -90,7 +90,9 @@ exports.deleteDocument = (req, res, next) => {
     Document.findById(documentId)
         .then(result => {
             if(!result) {
-                return next(new Error("Nie znaleziono dokumentu"))
+                const error = new Error("Nie znaleziono dokumentu")
+                next(error)
+                throw Error
             }
             fileHelper.deleteFile(result.path)
             return Document.deleteOne({_id: documentId})
