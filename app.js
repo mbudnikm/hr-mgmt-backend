@@ -79,5 +79,6 @@ mongoose.set('useFindAndModify', false);
 mongoose
     .connect(MONGODB_URI)
     .then(result => {
-        app.listen(process.env.PORT || 8080)})
+        app.listen(process.env.PORT || 8080)
+    })
     .catch(err => console.log(err))
