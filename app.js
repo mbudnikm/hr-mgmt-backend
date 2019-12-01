@@ -1,9 +1,13 @@
 const path = require('path')
+const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const uuid = require('uuid/v4')
+const helmet = require('helmet')
+const compression = require('compression')
+const morgan = require('morgan')
 
 const userRoutes = require('./routes/user')
 const accessRoutes = require('./routes/access')
@@ -14,7 +18,14 @@ const assessmentRoutes = require('./routes/assessment')
 const trainingRoutes = require('./routes/training')
 const documentRoutes = require('./routes/document')
 
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@hr-zgxte.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'})
+
 const app = express()
+app.use(helmet())
+app.use(compression())
+app.use(morgan('combined', {stream: accessLogStream}))
 
 const fileStorage = multer.diskStorage({
     destination: function(req, file, cb) {
@@ -74,8 +85,7 @@ app.use((error, req, res, next) => {
 mongoose.set('useFindAndModify', false);
 
 mongoose
-    .connect(
-        'mongodb+srv://app:app@hr-zgxte.mongodb.net/mgmt?retryWrites=true&w=majority')
+    .connect(MONGODB_URI)
     .then(result => {
-        app.listen(8080)})
+        app.listen(process.env.PORT || 8080)})
     .catch(err => console.log(err))
