@@ -17,8 +17,6 @@ const documentRoutes = require('./routes/document')
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@hr-zgxte.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}?retryWrites=true&w=majority`
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'})
-
 const app = express()
 
 const fileStorage = multer.diskStorage({
