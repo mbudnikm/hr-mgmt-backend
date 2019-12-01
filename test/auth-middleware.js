@@ -20,7 +20,7 @@ describe('Auth Middelware', () => {
                 return '123';
             }
         }
-        expect(authMiddleware.bind(this, req, {}, () => {})).to.throw('jwt must be provided')
+        expect(authMiddleware.bind(this, req, {}, () => {})).to.throw('Not authenticated')
     });
 
     it('should yield an employee_id after decoding the token', () => {

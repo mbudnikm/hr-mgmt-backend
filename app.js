@@ -5,9 +5,6 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const uuid = require('uuid/v4')
-const helmet = require('helmet')
-const compression = require('compression')
-const morgan = require('morgan')
 
 const userRoutes = require('./routes/user')
 const accessRoutes = require('./routes/access')
@@ -23,9 +20,6 @@ const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'})
 
 const app = express()
-app.use(helmet())
-app.use(compression())
-app.use(morgan('combined', {stream: accessLogStream}))
 
 const fileStorage = multer.diskStorage({
     destination: function(req, file, cb) {
