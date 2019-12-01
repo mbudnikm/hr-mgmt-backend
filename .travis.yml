@@ -10,4 +10,4 @@ script:
   - npm run start
   - npm test -- --coverage
 ignore:
-  - Procfile
+  - /Procfile
